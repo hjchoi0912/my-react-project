@@ -9,9 +9,6 @@ function Square({value, onSquareClick}) {
 }
 
 function Board({xIsNext, squares, onPlay}) {
-    const [xIsNext, setXIsNext] = useState(true);
-    const [squares, setSquares] = useState(Array(9).fill(null));
-
     function handleClick(i) {
         if (squares[i] || calculateWinner(squares)) {
             return;
@@ -55,6 +52,28 @@ function Board({xIsNext, squares, onPlay}) {
     );
 }
 
+export default function Game(){
+    const [xIsNext, setXIsNext] = useState(true);
+    const [history, setHistory] = useState([Array(9).fill(null)]);
+    const currentSquares = history[history.length - 1];
+    
+    function handlePlay(nextSquares){
+        setHistory([...history, nextSquares]);
+        setXIsNext(!xIsNext);
+    }
+
+    return (
+        <div className="game">
+            <div className="game-board">
+                <Board xIsNext={xIsNext} squares={currentSquares} onSquareClick={handlePlay} />
+            </div>
+            <div className="game-info">
+                <div>{/* TODO */}</div>
+            </div>
+        </div>
+    )
+}
+
 function calculateWinner(squares) {
     const lines = [
         [0, 1, 2],
@@ -73,27 +92,6 @@ function calculateWinner(squares) {
         }
     }
     return null;    
-}
-
-export default function Game(){
-    const [xIsNext, setXIsNext] = useState(true);
-    const [squares, setSquares] = useState(Array(9).fill(null));
-    const currentSquares = history[history.length - 1];
-    function handlePlay(nextSquares){
-        setHistory([...history, nextSquares]);
-        setXIsNext(!xIsNext);
-    }
-
-    return (
-        <div className="game">
-            <div className="game-board">
-                <Board xIsNext={xIsNext} squares={currentSquares} onSquareClick={handlePlay} />
-            </div>
-            <div className="game-info">
-                <div>{/* TODO */}</div>
-            </div>
-        </div>
-    )
 }
 
 
